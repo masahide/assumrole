@@ -13,6 +13,10 @@ import (
 )
 
 var (
+	// Version is version number
+	Version = "dev"
+	// Date is build date
+	Date            string
 	roleArn         string
 	roleSessionName string
 	durationSeconds = 3600
@@ -21,6 +25,7 @@ var (
 	serialNumber    string
 	tokenCode       string
 	showResult      bool
+	showVer         bool
 )
 
 func init() {
@@ -32,6 +37,7 @@ func init() {
 	flag.StringVar(&policy, "policy", policy, " IAM policy in JSON format.")
 	flag.StringVar(&serialNumber, "serialNumber", serialNumber, "The identification number of the MFA device that is associated with the user who is making the call.")
 	flag.StringVar(&tokenCode, "tokencode", tokenCode, "The value provided by the MFA device, if the trust policy of the role being assumed requires MFA.")
+	flag.BoolVar(&showVer, "version", showVer, "Show version")
 	flag.Parse()
 }
 
@@ -43,7 +49,10 @@ func nilString(s string) *string {
 }
 
 func main() {
-
+	if showVer {
+		fmt.Printf("version: %s %s\n", Version, Date)
+		return
+	}
 	if roleArn == "" {
 		log.Print("Require -role option.")
 		flag.PrintDefaults()
